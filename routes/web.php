@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FirstController;
 use App\Http\Controllers\MainController;
 
 /*
@@ -15,18 +16,20 @@ use App\Http\Controllers\MainController;
 */
 
 //Route::get('/', function () {
-    //return view('welcome');
+    //return view('dashboard');
 //});
 
-Route::prefix('/')->middleware(['auth'])
+Route::prefix('management')->middleware(['auth'])
 ->controller(MainController::class)
-->name('management')
+->name('management.')
 ->group(function(){
     Route::get('/','index')->name('index');
+    Route::get('/create','create')->name('create');
+    Route::post('/','store')->name('store');
 });
 
-//Route::get('/dashboard', function () {
-    //return view('dashboard');
-//})->middleware(['auth'])->name('dashboard');
+Route::get('/', [FirstController::class, 'index'])
+->middleware(['auth'])
+->name('dashboard');
 
 require __DIR__.'/auth.php';

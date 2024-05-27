@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\products;
+use App\Models\companies;
+use App\Models\sales;
 
 class MainController extends Controller
 {
@@ -23,7 +26,7 @@ class MainController extends Controller
      */
     public function create()
     {
-        //
+        return view('management.create');
     }
 
     /**
@@ -34,7 +37,14 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        //
+         products::create([
+            'product_name' => $request->product_name,
+            'company_id' => $request->company_id,
+            'price' => $request->price,
+            'stock' => $request->stock,
+            'comment' => $request->comment,
+        ]);
+        return to_route('management.index');
     }
 
     /**

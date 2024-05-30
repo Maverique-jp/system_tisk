@@ -20,8 +20,8 @@
             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">商品名</th>
             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">価格</th>
             <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">在庫数</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">メーカー名</th>
-            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100"><a href="{{ route('management.create') }}" class="bg-orange-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded ">新規登録</a>
+            <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100">メーカー名</th> <th class="px-4 py-3 title-font tracking-wider font-medium text-gray-900 text-sm bg-gray-100"><a href="{{ route('management.create') }}" class="bg-orange-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded ">新規登録</a>
+           
                 </th>
         </tr>
         </thead>
@@ -34,7 +34,12 @@
             <td class="border-t-2 border-gray-200 px-4 py-3">{{ $connects->price}}</td>
             <td class="border-t-2 border-gray-200 px-4 py-3">{{ $connects->stock}}</td>
             <td class="border-t-2 border-gray-200 px-4 py-3">{{ $connects->company_id}}</td>
-            <td class="border-t-2 border-gray-200 px-4 py-3"><a class="bg-blue-500 hover:bg-blue-700 text-black  py-0.5 px-1.5 rounded" href="{{ route('management.show',['id' => $connects->id ]) }}">詳細</a></td>
+            <td class="border-t-2 border-gray-200 px-4 py-3"><a class="bg-blue-500 hover:bg-blue-700 text-black  py-0.5 px-1.5 rounded" href="{{ route('management.show',['id' => $connects->id ]) }}">詳細</a>
+            <a class="bg-red-500 hover:bg-red-700 text-black py-0.5 px-1.5 rounded cursor-pointer"onclick="event.preventDefault(); document.getElementById('delete-form-{{ $connects->id }}').submit();">削除</a>
+            <form id="delete-form-{{ $connects->id }}" action="{{ route('management.destroy', ['id' => $connects->id]) }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+            </td>
           </tr>
           @endforeach
          </tbody>

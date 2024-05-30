@@ -66,10 +66,24 @@
                                 @endif
                             </div>
                             </div>
-                            <div class="p-2 w-full">
-                            <button class="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
-                           
+                            <div class="flex space-x-5">
+                                <form method="get" action="{{ route('management.edit', ['id' => $connects->id]) }}">
+                                    <div class="p-2">
+                                        <button type="submit" class="bg-orange-500 hover:bg-orange-700 text-black font-bold py-2 px-4 rounded h-12 leading-6 w-32">
+                                            編集
+                                        </button>
+                                    </div>
+                                </form>
+                                <form method="get" action="{{ route('management.index') }}">
+                                    <div class="p-2">
+                                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded h-12 leading-6 w-32">
+                                            戻る
+                                        </button>
+                                    </div>
+                                </form>
                         </div>
+
+
                         </div>
                     </div>
 </section>

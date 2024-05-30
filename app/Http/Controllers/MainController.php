@@ -68,7 +68,8 @@ class MainController extends Controller
      */
     public function edit($id)
     {
-        //
+        $connects = products::find($id);
+        return view('management.edit', compact('connects'));
     }
 
     /**
@@ -80,7 +81,14 @@ class MainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $connects = products::find($id);
+        $connects->product_name = $request->product_name;
+        $connects->company_id = $request->company_id;
+        $connects->price = $request->price;
+        $connects->stock = $request->stock;
+        $connects->comment = $request->comment;
+        $connects->save();
+        return to_route('management.index');
     }
 
     /**
@@ -91,6 +99,8 @@ class MainController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $connects = products::find($id);
+        $connects->delete();
+        return to_route('management.index');
     }
 }

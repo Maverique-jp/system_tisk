@@ -16,7 +16,8 @@ class MainController extends Controller
      */
     public function index()
     {
-        return view('management.index');
+        $connects=products::select('id','product_name','price','stock','company_id',)->get();
+        return view('management.index',compact('connects'));
     }
 
     /**
@@ -55,7 +56,8 @@ class MainController extends Controller
      */
     public function show($id)
     {
-        //
+        $connects = products::find($id);
+        return view('management.show', compact('connects'));
     }
 
     /**

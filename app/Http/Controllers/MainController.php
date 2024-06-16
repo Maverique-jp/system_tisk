@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\products;
 use App\Models\companies;
 use App\Models\sales;
+use Illuminate\Support\Facades\DB;
+use Exception;
+
 
 class MainController extends Controller
 {
@@ -38,14 +41,51 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-         products::create([
-            'product_name' => $request->product_name,
-            'company_id' => $request->company_id,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'comment' => $request->comment,
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'company_id' => 'required|integer',
+            'price' => 'required|integer',
+            'stock' => 'required|integer',
+            'comment' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-        return to_route('management.index');
+    
+        DB::beginTransaction();
+    
+        try {
+            // 画像ファイルの取得と保存
+            if ($request->hasFile('image')) {
+                $image = $request->file('image');
+                $file_name = $image->getClientOriginalName();
+                $image->storeAs('public/images', $file_name);
+                $image_path = 'storage/images/' . $file_name;
+            } else {
+                $image_path = null;
+            }
+    
+            // データベースに保存
+            $product = Products::create([
+                'product_name' => $request->product_name,
+                'company_id' => $request->company_id,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'comment' => $request->comment,
+                'img_path' => $image_path,
+            ]);
+    
+            DB::commit();
+    
+            return to_route('management.index');
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            
+            // エラーログを記録
+            \Log::error('商品の登録中にエラーが発生しました: ' . $e->getMessage());
+            
+            // エラーメッセージ
+            return back()->withErrors(['error' => '商品の登録中にエラーが発生しました。'])->withInput();
+        }
     }
 
     /**
@@ -81,16 +121,35 @@ class MainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $connects = products::find($id);
+        $request->validate([
+            'product_name' => 'required|string|max:255',
+            'company_id' => 'required|integer',
+            'price' => 'required|integer',
+            'stock' => 'required|integer',
+            'comment' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+    
+        $connects = Products::find($id);
         $connects->product_name = $request->product_name;
         $connects->company_id = $request->company_id;
         $connects->price = $request->price;
         $connects->stock = $request->stock;
         $connects->comment = $request->comment;
+    
+        // 画像のアップロードと保存
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $file_name = $image->getClientOriginalName();
+            $image->storeAs('public/images', $file_name);
+            $image_path = 'storage/images/' . $file_name;
+            $connects->img_path = $image_path;
+        }
+    
         $connects->save();
-        return to_route('management.index');
+    
+        return redirect()->route('management.index');
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -103,4 +162,7 @@ class MainController extends Controller
         $connects->delete();
         return to_route('management.index');
     }
+
+   
+    
 }

@@ -25,9 +25,15 @@
 
                             <div class="p-2 w-full">
                             <div class="relative">
-                                <label for="company_id" class="leading-7 text-sm text-gray-600"> 商品画像</label>
-                                <div  class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">画像</div>
+                                <label for="img_path" class="leading-7 text-sm text-gray-600"> 商品画像</label>
+                                @if($connects->img_path)
+                             <div>
+                            <img src="{{ asset($connects->img_path) }}" alt="{{ $connects->product_name }}" class="w-1/2 h-auto mt-4">
                             </div>
+                            @else
+                                <p>画像がありません。</p>
+                            @endif
+                                    </div>
                             </div>
 
                             <div class="p-2 w-full">

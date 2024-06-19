@@ -19,8 +19,35 @@ class MainController extends Controller
      */
     public function index()
     {
-        $connects=products::select('id','product_name','price','stock','company_id',)->get();
+        $connects=products::select('id','product_name','price','stock','category',)->get();
+        $category = [
+            1 => '飲料',
+            2 => '食品',
+            3 => '菓子',
+            4 => '日用品',
+            5 => '衣料品',
+            6 => '家電製品',
+            7 => '文房具',
+            8 => '書類・雑誌',
+            9 => '医薬品',
+            10 => '化粧品',
+            11 => '玩具・ゲーム',
+            12 => 'スポーツ用品',
+            13 => 'ペット用品',
+            14 => '家具・インテリア',
+            15 => '園芸用品',
+            16 => '自動車用品',
+            17 => 'キッチン用品',
+            18 => '生活雑貨'
+        ];
+
+        // カテゴリIDをカテゴリ名に変換して配列に追加
+        foreach ($connects as $product) {
+            $product->category = $category[$product->category] ?? '不明';
+        }
+
         return view('management.index',compact('connects'));
+
     }
 
     /**
@@ -43,7 +70,7 @@ class MainController extends Controller
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
-            'company_id' => 'required|integer',
+            'category' => 'required|integer',
             'price' => 'required|integer',
             'stock' => 'required|integer',
             'comment' => 'nullable|string',
@@ -66,7 +93,7 @@ class MainController extends Controller
             // データベースに保存
             $product = Products::create([
                 'product_name' => $request->product_name,
-                'company_id' => $request->company_id,
+                'category' => $request->category,
                 'price' => $request->price,
                 'stock' => $request->stock,
                 'comment' => $request->comment,
@@ -97,7 +124,27 @@ class MainController extends Controller
     public function show($id)
     {
         $connects = products::find($id);
-        return view('management.show', compact('connects'));
+
+        if($connects->category === 1 ){ $category = '食品'; }
+        if($connects->category === 2 ){ $category = '飲料'; }
+        if($connects->category === 3 ){ $category = '菓子'; }
+        if($connects->category === 4 ){ $category = '日用品'; }
+        if($connects->category === 5 ){ $category = '衣料品'; }
+        if($connects->category === 6 ){ $category = '家電製品'; }
+        if($connects->category === 7 ){ $category = '文房具'; }
+        if($connects->category === 8 ){ $category = '書類・雑誌'; }
+        if($connects->category === 9 ){ $category = '医薬品'; }
+        if($connects->category === 10 ){ $category = '化粧品';}
+        if($connects->category === 11 ){ $category = '玩具・ゲーム'; }
+        if($connects->category === 12 ){ $category = 'スポーツ用品'; }
+        if($connects->category === 13 ){ $category = 'ペット用品'; }
+        if($connects->category === 14 ){ $category = '家具店インテリア'; }
+        if($connects->category === 15 ){ $category = '園芸用品'; }
+        if($connects->category === 16 ){ $category = '自動車用品'; }
+        if($connects->category === 17 ){ $category = 'キッチン用品'; }
+        if($connects->category === 18 ){ $category = '生活雑貨'; }
+        
+        return view('management.show', compact('connects','category'));
     }
 
     /**
@@ -123,7 +170,7 @@ class MainController extends Controller
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
-            'company_id' => 'required|integer',
+            'category' => 'required|integer',
             'price' => 'required|integer',
             'stock' => 'required|integer',
             'comment' => 'nullable|string',
@@ -132,7 +179,7 @@ class MainController extends Controller
     
         $connects = Products::find($id);
         $connects->product_name = $request->product_name;
-        $connects->company_id = $request->company_id;
+        $connects->category = $request->category;
         $connects->price = $request->price;
         $connects->stock = $request->stock;
         $connects->comment = $request->comment;

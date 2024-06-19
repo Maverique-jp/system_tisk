@@ -26,11 +26,31 @@
                             </div>
 
                             <div class="p-2 w-full">
-                            <div class="relative">
-                                <label for="company_id" class="leading-7 text-sm text-gray-600"> メーカー名</label>
-                                <input type="text" id="company_id" name="company_id" value="{{ $connects->company_id }}" class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                            </div>
-                            </div>
+                                            <div class="relative">
+                                                <label for="category" class="leading-7 text-sm text-gray-600">カテゴリー</label>
+                                                <select name="category">
+                                                <option value="">選択してください</option>
+                                                    <option value="1">飲料</option>
+                                                    <option value="2">食品</option>
+                                                    <option value="3">菓子</option>
+                                                    <option value="4">日用品</option>
+                                                    <option value="5">衣料品</option>
+                                                    <option value="6">家電製品</option>
+                                                    <option value="7">文房具</option>
+                                                    <option value="8">書籍・雑誌</option>
+                                                    <option value="9">医薬品</option>
+                                                    <option value="10">化粧品</option>
+                                                    <option value="11">玩具・ゲーム</option>
+                                                    <option value="12">スポーツ用品</option>
+                                                    <option value="13">ペット用品</option>
+                                                    <option value="14">家具・インテリア</option>
+                                                    <option value="15">園芸用品</option>
+                                                    <option value="16">自動車用品</option>
+                                                    <option value="17">キッチン用品</option>
+                                                    <option value="18">生活雑貨</option>
+                                                </select>    
+                                            </div>
+                                        </div>
 
                             <div class="p-2 w-full">
                             <div class="relative">

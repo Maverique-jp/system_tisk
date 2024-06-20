@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\products;
 use App\Models\companies;
 use App\Models\sales;
+use App\Http\Requests\StoreConnectRequest;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -19,7 +20,14 @@ class MainController extends Controller
      */
     public function index()
     {
-        $connects=products::select('id','product_name','price','stock','category',)->get();
+        //$connects=products::select('row_number','product_name','price','stock','category',)->get();
+        $connects = DB::table('products')
+        ->select('id', 'product_name', 'price', 'stock', 'category', 'img_path',
+            DB::raw('ROW_NUMBER() OVER (ORDER BY id) as row_number'))
+        ->get();
+
+        
+
         $category = [
             1 => '飲料',
             2 => '食品',
@@ -46,7 +54,7 @@ class MainController extends Controller
             $product->category = $category[$product->category] ?? '不明';
         }
 
-        return view('management.index',compact('connects'));
+       return view('management.index',compact('connects'));
 
     }
 
@@ -66,7 +74,7 @@ class MainController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreConnectRequest $request)
     {
         $request->validate([
             'product_name' => 'required|string|max:255',
